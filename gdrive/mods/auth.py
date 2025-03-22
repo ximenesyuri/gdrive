@@ -11,13 +11,13 @@ SCOPES = [
     'https://www.googleapis.com/auth/spreadsheets'
 ]
 
-def auth(credentials=None):
+MAIN_DIR = Path(os.path.dirname(__file__), '..', '..').resolve()
+load_dotenv(os.path.join(MAIN_DIR, '.env'))
+credentials = os.getenv('GOOGLE_DRIVE_CREDENTIALS')
+
+def auth(credentials):
     if not credentials:
-        MAIN_DIR = Path(os.path.dirname(__file__), '..', '..').resolve()
-        load_dotenv(os.path.join(MAIN_DIR, '.env'))
-        credentials = os.getenv('GOOGLE_DRIVE_CREDENTIALS')
-        if not credentials:
-            raise EnvironmentError('Credentials file not defined.')
+        raise EnvironmentError('Credentials file not defined.')
 
     creds = None
     if os.path.exists('token.json'):
@@ -33,4 +33,4 @@ def auth(credentials=None):
             token.write(creds.to_json())
     return creds
 
-creds = auth()
+creds = auth(credentials)
