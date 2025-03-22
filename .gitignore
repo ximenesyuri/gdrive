@@ -1,0 +1,8 @@
+dist/
+.venv
+build/
+__pycache__/
+*.py[oc]
+wheels/
+*.egg-info
+token.json

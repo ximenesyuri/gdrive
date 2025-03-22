@@ -1,0 +1,36 @@
+from google.oauth2.credentials import Credentials
+from google_auth_oauthlib.flow import InstalledAppFlow
+from google.auth.transport.requests import Request
+from dotenv import load_dotenv
+from pathlib import Path
+import os.path
+
+SCOPES = [
+    'https://www.googleapis.com/auth/drive',
+    'https://www.googleapis.com/auth/documents',
+    'https://www.googleapis.com/auth/spreadsheets'
+]
+
+def auth(credentials=None):
+    if not credentials:
+        MAIN_DIR = Path(os.path.dirname(__file__), '..', '..').resolve()
+        load_dotenv(os.path.join(MAIN_DIR, '.env'))
+        credentials = os.getenv('GOOGLE_DRIVE_CREDENTIALS')
+        if not credentials:
+            raise EnvironmentError('Credentials file not defined.')
+
+    creds = None
+    if os.path.exists('token.json'):
+        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            flow = InstalledAppFlow.from_client_secrets_file(
+                credentials, SCOPES)
+            creds = flow.run_local_server(port=0)
+        with open('token.json', 'w') as token:
+            token.write(creds.to_json())
+    return creds
+
+creds = auth()
