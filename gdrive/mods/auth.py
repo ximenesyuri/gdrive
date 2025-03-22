@@ -13,9 +13,6 @@ SCOPES = [
 credentials = os.getenv('GOOGLE_DRIVE_CREDENTIALS')
 
 def auth(credentials):
-    if not credentials:
-        raise EnvironmentError('Credentials file not defined.')
-
     creds = None
     if os.path.exists('token.json'):
         creds = Credentials.from_authorized_user_file('token.json', SCOPES)
