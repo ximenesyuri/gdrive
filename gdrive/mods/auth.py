@@ -10,9 +10,7 @@ SCOPES = [
     'https://www.googleapis.com/auth/spreadsheets'
 ]
 
-credentials = os.getenv('GOOGLE_DRIVE_CREDENTIALS')
-
-def auth(credentials):
+def auth(credentials_file):
     creds = None
     if os.path.exists('token.json'):
         creds = Credentials.from_authorized_user_file('token.json', SCOPES)
@@ -26,5 +24,3 @@ def auth(credentials):
         with open('token.json', 'w') as token:
             token.write(creds.to_json())
     return creds
-
-creds = auth(credentials)

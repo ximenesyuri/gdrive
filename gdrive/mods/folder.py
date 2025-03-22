@@ -1,38 +1,32 @@
-from gdrive.mods.service import service
 from gdrive.mods.file import remove
 
 class folder:
     class get:
         @staticmethod
-        def id(name, parent_id):
+        def id(service_drive, name, parent_id):
             query = f"'{parent_id}' in parents and mimeType = 'application/vnd.google-apps.folder' and name = '{name}'"
-            service_ = service.drive()
-            results = service_.files().list(q=query, fields="files(id)").execute()
+            results = service_drive.files().list(q=query, fields="files(id)").execute()
             items = results.get('files', [])
             return items[0]['id'] if items else None
 
         @staticmethod
-        def name(folder_id):
-            service_ = service.drive()
-            folder = service_.files().get(fileId=folder_id, fields="name").execute()
+        def name(service_drive, folder_id):
+            folder = service_drive.files().get(fileId=folder_id, fields="name").execute()
             return folder.get('name', None)
 
         @staticmethod
-        def creation(folder_id):
-            service_ = service.drive()
-            folder = service_.files().get(fileId=folder_id, fields="createdTime").execute()
+        def creation(service_drive, folder_id):
+            folder = service_drive.files().get(fileId=folder_id, fields="createdTime").execute()
             return folder.get('createdTime', None)
 
         @staticmethod
-        def modified(folder_id):
-            service_ = service.drive()
-            folder = service_.files().get(fileId=folder_id, fields="modifiedTime").execute()
+        def modified(service_drive, folder_id):
+            folder = service_drive.files().get(fileId=folder_id, fields="modifiedTime").execute()
             return folder.get('modifiedTime', None)
 
         @staticmethod
-        def all(folder_id):
-            service_ = service.drive()
-            folder = service_.files().get(fileId=folder_id, fields="id, name, createdTime, modifiedTime").execute()
+        def all(service_drive, folder_id):
+            folder = service_drive.files().get(fileId=folder_id, fields="id, name, createdTime, modifiedTime").execute()
             return {
                 'id': folder.get('id'),
                 'name': folder.get('name'),
@@ -41,11 +35,10 @@ class folder:
             }
 
     @staticmethod
-    def list(parent_id):
-        service_ = service.drive()
+    def list(service_drive, parent_id):
         parent_details = folder.get.all(parent_id)
         query = f"'{parent_id}' in parents and mimeType = 'application/vnd.google-apps.folder'"
-        results = service_.files().list(
+        results = service_drive.files().list(
             q=query,
             fields="files(id, name, createdTime, modifiedTime)"
         ).execute()
@@ -67,15 +60,13 @@ class folder:
     ls = list
 
     @staticmethod
-    def create(name, parent_id):
+    def create(service_drive, name, parent_id):
         folder_metadata = {
             'name': name,
             'mimeType': 'application/vnd.google-apps.folder',
             'parents': [parent_id]
         }
-
-        service_ = service.drive()
-        folder = service_.files().create(body=folder_metadata, fields='id, name, createdTime, modifiedTime').execute()
+        folder = service_drive.files().create(body=folder_metadata, fields='id, name, createdTime, modifiedTime').execute()
 
         return {
             'id': folder['id'],
@@ -89,32 +80,30 @@ class folder:
     rm     = remove
 
     @staticmethod
-    def move(folder_id, parent_id, recursive=True):
-        service_ = service.drive()
+    def move(service_drive, folder_id, parent_id, recursive=True):
         if recursive:
             query = f"'{folder_id}' in parents"
-            results = service_.files().list(q=query, fields="files(id, mimeType)").execute()
+            results = service_drive_.files().list(q=query, fields="files(id, mimeType)").execute()
             for item in results.get('files', []):
                 if item['mimeType'] == 'application/vnd.google-apps.folder':
                     Folder.mv(item['id'], parent_id, recursive)
                 else:
-                    service_.files().update(fileId=item['id'], addParents=parent_id, removeParents=folder_id).execute()
-        service_.files().update(fileId=folder_id, addParents=parent_id, removeParents=folder_id).execute()
+                    service_drive.files().update(fileId=item['id'], addParents=parent_id, removeParents=folder_id).execute()
+        service_drive.files().update(fileId=folder_id, addParents=parent_id, removeParents=folder_id).execute()
     mv = move
 
     @staticmethod
-    def copy(folder_id, parent_id, recursive=True):
-        service_ = service.drive()
-        copied_folder = service_.files().copy(fileId=folder_id, body={'parents': [parent_id]}).execute()
+    def copy(service_drive, folder_id, parent_id, recursive=True):
+        copied_folder = service_drive.files().copy(fileId=folder_id, body={'parents': [parent_id]}).execute()
 
         if recursive:
             query = f"'{folder_id}' in parents and mimeType != 'application/vnd.google-apps.folder'"
-            results = service_.files().list(q=query, fields="files(id)").execute()
+            results = service_drive.files().list(q=query, fields="files(id)").execute()
             for item in results.get('files', []):
-                service_.files().copy(fileId=item['id'], body={'parents': [copied_folder['id']]}).execute()
+                service_drive_.files().copy(fileId=item['id'], body={'parents': [copied_folder['id']]}).execute()
 
             subfolders_query = f"'{folder_id}' in parents and mimeType = 'application/vnd.google-apps.folder'"
-            subfolders = service_.files().list(q=subfolders_query, fields="files(id)").execute()
+            subfolders = service_drive.files().list(q=subfolders_query, fields="files(id)").execute()
             for item in subfolders.get('files', []):
                 Folder.copy(item['id'], copied_folder['id'], recursive)
 

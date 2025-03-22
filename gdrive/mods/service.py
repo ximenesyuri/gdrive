@@ -1,12 +1,11 @@
 from googleapiclient.discovery import build
-from gdrive.mods.auth import creds
 
 class service:
-    def drive():
+    def drive(creds):
         return build('drive', 'v3', credentials=creds)
 
-    def docs():
+    def docs(creds):
         return build('docs', 'v1', credentials=creds)
 
-    def sheets():
+    def sheets(creds):
         return build('sheets', 'v4', credentials=creds)
