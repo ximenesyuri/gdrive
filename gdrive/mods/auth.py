@@ -1,7 +1,6 @@
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
-from dotenv import load_dotenv
 from pathlib import Path
 import os.path
 
@@ -11,8 +10,6 @@ SCOPES = [
     'https://www.googleapis.com/auth/spreadsheets'
 ]
 
-MAIN_DIR = Path(os.path.dirname(__file__), '..', '..').resolve()
-load_dotenv(os.path.join(MAIN_DIR, '.env'))
 credentials = os.getenv('GOOGLE_DRIVE_CREDENTIALS')
 
 def auth(credentials):
