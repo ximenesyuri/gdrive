@@ -36,7 +36,7 @@ class folder:
 
     @staticmethod
     def list(service_drive, parent_id):
-        parent_details = folder.get.all(parent_id)
+        parent_details = folder.get.all(service_drive, parent_id)
         query = f"'{parent_id}' in parents and mimeType = 'application/vnd.google-apps.folder'"
         results = service_drive.files().list(
             q=query,
