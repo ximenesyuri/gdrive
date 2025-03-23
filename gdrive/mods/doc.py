@@ -36,6 +36,11 @@ class doc:
                 'modified': drive_meta.get('modifiedTime', None)
             }
 
+        @staticmethod
+        def content(service_docs, doc_id):
+            document = service_docs.documents().get(documentId=doc_id).execute()
+            return document.get('body').get('content')
+
     @staticmethod
     def list(service, parent_id):
         query = f"'{parent_id}' in parents and mimeType = 'application/vnd.google-apps.document'"
