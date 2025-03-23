@@ -1,5 +1,6 @@
 dist/
 .venv
+.env
 build/
 __pycache__/
 *.py[oc]
