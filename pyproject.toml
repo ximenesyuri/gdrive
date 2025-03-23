@@ -1,12 +1,19 @@
 [project]
 name = "gdrive"
 version = "0.0.0"
-description = "<project-description>"
+description = "An intuitive Python client for Google Drive API"
 readme = "README.md"
 requires-python = ">=3.9"
 license = {text = "BSD"}
 authors = [
     {name = "Yuri Ximenes", email = "yx.dev@gmx.ie"},
+]
+
+dependencies = [
+    "google-auth",
+    "google-auth-oauthlib",
+    "google-auth-httplib2",
+    "google-api-python-client"
 ]
 
 [build-system]
