@@ -37,8 +37,9 @@ class sheet:
 
     class read:
         def cell(service_sheets, spreadsheet_id, sheet_name, row, line):
-            sheet = service_sheets.spreadsheets().get(spreadsheetId=spreadsheet_id, range=f'{sheet_name}!{row}{line}').execute()
-            return sheet.get('values', [])
+            cell_range = f'{sheet_name}!{row}{line}'
+            result = service_sheets.spreadsheets().values().get(spreadsheetId=spreadsheet_id, range=cell_range).execute()
+            return result.get('values', [[]]) 
 
     @staticmethod
     def list(service_drive, parent_id):
