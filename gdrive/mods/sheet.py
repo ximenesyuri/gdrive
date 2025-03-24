@@ -36,7 +36,7 @@ class sheet:
             }
 
     class read:
-        def cell(sheets_service, spreadsheet_id, sheet_name, row, line):
+        def cell(service_sheets, spreadsheet_id, sheet_name, row, line):
             sheet = service_sheets.spreadsheets().get(spreadsheetId=sheet_id, range=f'{sheet_name}!{row}{line}').execute()
             return sheet.get('values', [])
 
