@@ -35,6 +35,11 @@ class sheet:
                 'modified': drive_meta.get('modifiedTime', None)
             }
 
+    class read:
+        def cell(sheets_service, spreadsheet_id, sheet_name, row, line):
+            sheet = service_sheets.spreadsheets().get(spreadsheetId=sheet_id, range=f'{sheet_name}!{row}{line}').execute()
+            return sheet.get('values', [])
+
     @staticmethod
     def list(service_drive, parent_id):
         query = f"'{parent_id}' in parents and mimeType = 'application/vnd.google-apps.spreadsheet'"
