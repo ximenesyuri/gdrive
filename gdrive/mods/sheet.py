@@ -1,22 +1,22 @@
 from gdrive.mods.file import remove, move, copy
 
-class spreadsheet:
+class sheet:
     class get:
         @staticmethod
         def id(service_drive, name, parent_id):
             query = f"'{parent_id}' in parents and mimeType = 'application/vnd.google-apps.spreadsheet' and name = '{name}'"
-            results = service.files().list(q=query, fields="files(id)").execute()
+            results = service_drive.files().list(q=query, fields="files(id)").execute()
             items = results.get('files', [])
             return items[0]['id'] if items else None
 
         @staticmethod
-        def name(service_sheet, sheet_id):
-            sheet = service.spreadsheets().get(spreadsheetId=sheet_id).execute()
+        def name(service_sheets, sheet_id):
+            sheet = service_sheets.spreadsheets().get(spreadsheetId=sheet_id).execute()
             return sheet.get('properties', {}).get('title', None)
 
         @staticmethod
         def creation(service_drive, sheet_id):
-            sheet = service.files().get(fileId=sheet_id, fields="createdTime").execute()
+            sheet = service_drive.files().get(fileId=sheet_id, fields="createdTime").execute()
             return sheet.get('createdTime', None)
 
         @staticmethod
@@ -38,7 +38,7 @@ class spreadsheet:
     @staticmethod
     def list(service_drive, parent_id):
         query = f"'{parent_id}' in parents and mimeType = 'application/vnd.google-apps.spreadsheet'"
-        results = service.files().list(
+        results = service_drive.files().list(
             q=query,
             fields="files(id, name)"
         ).execute()
