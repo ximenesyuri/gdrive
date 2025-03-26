@@ -1,4 +1,5 @@
 from gdrive.mods.file import remove, move, copy
+import json
 
 class sheet:
     class get:
@@ -36,10 +37,33 @@ class sheet:
             }
 
     class read:
+        def sheet(service_sheets, spreadsheet_id, sheet_name):
+            cell_range = f'{sheet_name}'
+            result = service_sheets.spreadsheets().values().get(spreadsheetId=spreadsheet_id, range=cell_range).execute()
+            return result.get('values', [])
+
         def cell(service_sheets, spreadsheet_id, sheet_name, row, line):
             cell_range = f'{sheet_name}!{row}{line}'
             result = service_sheets.spreadsheets().values().get(spreadsheetId=spreadsheet_id, range=cell_range).execute()
-            return result.get('values', [[]]) 
+            return result.get('values', [])
+
+    class export:
+        class sheet:
+            def to_json(service_sheets, spreadsheet_id, sheet_name, headers=True, start_line="1", start_row="A"):
+                cell_range = f"{sheet_name}!{start_row}{start_line}"
+                result = service_sheets.spreadsheets().values().get(spreadsheetId=spreadsheet_id, range=cell_range).execute()
+                values = result.get('values', [])
+                if not values:
+                    print('No data found.')
+                    return []
+                if headers:
+                    headers = values[0]
+                    rows = values[1:]
+                else:
+                    headers = [f"Column{i+1}" for i in range(len(values[0]))]
+                    rows = values
+                json_data = [dict(zip(headers, row)) for row in rows]
+                return json_data
 
     @staticmethod
     def list(service_drive, parent_id):

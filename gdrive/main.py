@@ -10,5 +10,3 @@ class GDrive:
     folder  = folder
     doc     = doc
     sheet   = sheet
-
-
