@@ -49,8 +49,8 @@ class sheet:
 
     class export:
         class sheet:
-            def to_json(service_sheets, spreadsheet_id, sheet_name, headers=True, start_line="1", start_row="A"):
-                cell_range = f"{sheet_name}!{start_row}{start_line}"
+            def to_json(service_sheets, spreadsheet_id, sheet_name, headers=True):
+                cell_range = f"{sheet_name}!A1:Z1000"
                 result = service_sheets.spreadsheets().values().get(spreadsheetId=spreadsheet_id, range=cell_range).execute()
                 values = result.get('values', [])
                 if not values:
@@ -62,7 +62,10 @@ class sheet:
                 else:
                     headers = [f"Column{i+1}" for i in range(len(values[0]))]
                     rows = values
-                json_data = [dict(zip(headers, row)) for row in rows]
+                json_data = []
+                for row in rows:
+                    row += [None] * (len(headers) - len(row))
+                    json_data.append(dict(zip(headers, row)))
                 return json_data
 
     @staticmethod
