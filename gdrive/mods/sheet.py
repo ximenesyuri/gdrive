@@ -38,9 +38,25 @@ class sheet:
 
     class read:
         def sheet(service_sheets, spreadsheet_id, sheet_name):
-            cell_range = f'{sheet_name}'
-            result = service_sheets.spreadsheets().values().get(spreadsheetId=spreadsheet_id, range=cell_range).execute()
-            return result.get('values', [])
+            result = service_sheets.spreadsheets().get(
+                spreadsheetId=spreadsheet_id,
+                ranges=[sheet_name],
+                includeGridData=True
+            ).execute()
+            grid_data = result['sheets'][0]['data'][0].get('rowData', [])
+            rows = []
+            for row in grid_data:
+                row_values = []
+                has_entry = False
+                if 'values' in row:
+                    for cell in row['values']:
+                        value = cell.get('formattedValue', '')
+                        if value:
+                            has_entry = True
+                        row_values.append(value)
+                if has_entry:
+                    rows.append(row_values)
+            return rows 
 
         def cell(service_sheets, spreadsheet_id, sheet_name, row, line):
             cell_range = f'{sheet_name}!{row}{line}'
