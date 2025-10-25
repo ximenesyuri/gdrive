@@ -8,7 +8,6 @@ license = {text = "BSD"}
 authors = [
     {name = "Yuri Ximenes", email = "yx.dev@gmx.ie"},
 ]
-
 dependencies = [
     "google-auth",
     "google-auth-oauthlib",

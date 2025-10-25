@@ -6,12 +6,12 @@
 
 With `pip`:
 ```bash
-/path/to/venv/bin/pip install git+https://github.com/pythonalta/gdrive
+pip install git+https://github.com/ximenesyuri/gdrive
 ```
 
 With [py](https://github.com/ximenesyuri/py):
 ```bash
-py install pythonalta/gdrive --from github
+py install ximenesyuri/gdrive
 ```
 
 # Usage
