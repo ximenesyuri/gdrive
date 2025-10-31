@@ -2,10 +2,10 @@ from gdrive.mods.file import remove, copy, move
 
 class doc:
     class get:
-        @staticmethod
-        def id(service, name, parent_id):
+        @typed
+        def id(drive_service, name, parent_id):
             query = f"'{parent_id}' in parents and mimeType = 'application/vnd.google-apps.document' and name = '{name}'"
-            results = service.files().list(q=query, fields="files(id)").execute()
+            results = drive_service.files().list(q=query, fields="files(id)").execute()
             items = results.get('files', [])
             return items[0]['id'] if items else None
 
