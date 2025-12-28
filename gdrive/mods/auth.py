@@ -1,9 +1,10 @@
 import json
 import os
-from typed import typed, Path, Json, Union, List, Any
+from typed import typed, Path, Json, Union, List
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
+from gdrive.mods.types import Credentials
 
 SCOPES = [
     'https://www.googleapis.com/auth/drive',
@@ -16,7 +17,7 @@ def auth(
     credentials_data: Union(Path, Json),
     token_data: Union(Path, Json),
     scopes: List=SCOPES
-    ) -> Any:
+    ) -> Credentials:
 
     creds = None
 

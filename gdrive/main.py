@@ -4,7 +4,7 @@ from gdrive.mods.folder  import folder
 from gdrive.mods.doc     import doc
 from gdrive.mods.sheet   import sheet
 
-class GDrive:
+class gdrive:
     auth    = auth
     service = service
     folder  = folder
