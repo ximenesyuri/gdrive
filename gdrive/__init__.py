@@ -1,4 +1,2 @@
-from gdrive.main import GDrive
-
-gdrive = GDrive
-gd     = gdrive
+from gdrive.main import gdrive
+from gdrive.mods.types import Credentials
