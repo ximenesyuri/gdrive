@@ -1,7 +1,7 @@
 import json
 import os
-from typed import typed, Path, Union, List
-from utils.types import Json
+from typed import typed, Union, List
+from utils.types import Json, Path
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from gdrive.mods.types import Credentials

@@ -1,5 +1,4 @@
 from gdrive.mods.file import remove, move, copy
-import json
 
 class sheet:
     class get:
